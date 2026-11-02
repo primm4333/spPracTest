@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${category.name} + ' | Daily Brief'">Category | Daily Brief</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+</head>
+<body>
+<header class="topbar">
+    <a class="brand" th:href="@{/}">Daily<span>Brief</span></a>
+    <a class="back-link" th:href="@{/}">← All categories</a>
+</header>
+<main class="container">
+    <p class="eyebrow">NEWS CATEGORY</p>
+    <h1 th:text="${category.name}">Sports</h1>
+    <p class="muted" th:text="${category.description}">Latest stories</p>
+
+    <div th:if="${#lists.isEmpty(newsItems)}" class="empty-state">
+        No news has been published in this category yet.
+    </div>
+    <section class="news-list" th:unless="${#lists.isEmpty(newsItems)}">
+        <article class="news-row" th:each="item : ${newsItems}">
+            <div>
+                <p class="eyebrow" th:text="${#temporals.format(item.publishedAt, 'dd MMM yyyy · HH:mm')}">Date</p>
+                <h2><a th:href="@{/news/{id}(id=${item.id})}" th:text="${item.headline}">News headline</a></h2>
+                <p class="excerpt" th:text="${#strings.abbreviate(item.content, 160)}">News summary</p>
+                <div class="chips">
+                    <span class="chip" th:each="cat : ${item.categories}" th:text="${cat.name}">Sports</span>
+                </div>
+            </div>
+            <a class="read-link" th:href="@{/news/{id}(id=${item.id})}">Read story →</a>
+        </article>
+    </section>
+</main>
+<footer>Daily Brief · <a th:href="@{/}">Home</a></footer>
+</body>
+</html>

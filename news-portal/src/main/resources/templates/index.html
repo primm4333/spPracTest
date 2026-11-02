@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Daily Brief | News Portal</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+</head>
+<body>
+<header class="topbar">
+    <a class="brand" th:href="@{/}">Daily<span>Brief</span></a>
+    <span class="tagline">News that matters</span>
+</header>
+<main class="container">
+    <section class="hero">
+        <p class="eyebrow">WELCOME TO DAILY BRIEF</p>
+        <h1>Explore the latest news.</h1>
+        <p>Select a category to discover stories from around the world.</p>
+    </section>
+    <h2>Browse categories</h2>
+    <section class="category-grid">
+        <a class="category-card" th:each="category : ${categories}"
+           th:href="@{/category/{id}(id=${category.id})}">
+            <span class="category-arrow">↗</span>
+            <h3 th:text="${category.name}">Sports</h3>
+            <p th:text="${category.description}">Category description</p>
+            <span class="text-link">View headlines →</span>
+        </a>
+    </section>
+</main>
+<footer>Daily Brief · Java News Portal Practical Test</footer>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${news.headline} + ' | Daily Brief'">News | Daily Brief</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+</head>
+<body>
+<header class="topbar">
+    <a class="brand" th:href="@{/}">Daily<span>Brief</span></a>
+    <a class="back-link" th:href="@{/}">← Home</a>
+</header>
+<main class="container article-container">
+    <a class="back-link" href="javascript:history.back()">← Back to headlines</a>
+    <article class="article">
+        <div class="chips">
+            <span class="chip" th:each="cat : ${news.categories}" th:text="${cat.name}">Sports</span>
+        </div>
+        <p class="eyebrow" th:text="${#temporals.format(news.publishedAt, 'dd MMMM yyyy · HH:mm')}">Date</p>
+        <h1 th:text="${news.headline}">News headline</h1>
+        <div class="article-content" th:text="${news.content}">Full news content</div>
+    </article>
+
+    <section class="comments-section">
+        <h2>Reader comments <span class="count" th:text="${news.comments.size()}">0</span></h2>
+
+        <div th:if="${success}" class="alert success" th:text="${success}"></div>
+        <div th:if="${error}" class="alert error" th:text="${error}"></div>
+
+        <form class="comment-form" th:action="@{/news/{id}/comments(id=${news.id})}" method="post">
+            <label for="readerName">Your name</label>
+            <input id="readerName" name="readerName" type="text" maxlength="80" required placeholder="Enter your name">
+            <label for="content">Your comment</label>
+            <textarea id="content" name="content" maxlength="1000" rows="4" required placeholder="Share your thoughts..."></textarea>
+            <button type="submit">Post comment</button>
+        </form>
+
+        <div th:if="${#lists.isEmpty(news.comments)}" class="empty-state">
+            No comments yet. Be the first to comment.
+        </div>
+        <div class="comment" th:each="comment : ${news.comments}">
+            <div class="comment-heading">
+                <strong th:text="${comment.readerName}">Reader</strong>
+                <span class="muted" th:text="${#temporals.format(comment.createdAt, 'dd MMM yyyy · HH:mm')}">Date</span>
+            </div>
+            <p th:text="${comment.content}">Comment content</p>
+        </div>
+    </section>
+</main>
+<footer>Daily Brief · News and community</footer>
+</body>
+</html>
